@@ -1,0 +1,11 @@
+{
+  "name": "angular_todo_auth",
+  "version": "1.0.0",
+  "description": "An angular todo application with authorization",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Ovidio R. Calvet",
+  "license": "MIT"
+}
