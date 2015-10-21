@@ -9,6 +9,8 @@
   "author": "Ovidio R. Calvet",
   "license": "MIT",
   "devDependencies": {
-    "gulp": "^3.9.0"
+    "gulp": "^3.9.0",
+    "gulp-concat": "^2.6.0",
+    "gulp-inject": "^3.0.0"
   }
 }
