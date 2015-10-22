@@ -7,7 +7,7 @@ var config = {
 	clientAngularAppFiles: './client/app/**/*.js',
 	clientStylesFiles: './client/styles/**/*.css',
 	serverPublicFolder: './server/public',
-	indexHtml: './client/index.html',
+	webIndex: './server/views/layout.ejs',
 	libraries: ['./node_modules/angular/angular.js', 
 		'./node_modules/angular-aria/angular-aria.js', 
 		'./node_modules/angular-animate/angular-animate.js', 
@@ -37,7 +37,7 @@ gulp.task('move-styles', function() {
 
 gulp.task('include-files-in-html', [ 'move-libraries', 'move-application-files', 'move-styles'], function() {
 	// Get the target file for injection
-	var target = gulp.src(config.indexHtml);
+	var target = gulp.src(config.webIndex);
 	
   // It's not necessary to read the files (will speed up things), we're only after their paths: 
   var librarySources = gulp.src([config.serverPublicFolder + '/libs/angular.js', config.serverPublicFolder + '/libs/**/*.js'], {read: false});
@@ -53,9 +53,9 @@ gulp.task('include-files-in-html', [ 'move-libraries', 'move-application-files',
 		.pipe(gulpInject(librarySources, {ignorePath: 'server/public'}))
 		.pipe(gulpInject(styles, {ignorePath: 'server/public'}))
 		.pipe(gulpInject(appSources, {name: 'application', ignorePath: 'server/public'}))
-    .pipe(gulp.dest(config.serverPublicFolder));
+    .pipe(gulp.dest('./server/views'));
 });
 
 gulp.task('watch', function() {
-	gulp.watch([config.clientAngularAppFiles, config.indexHtml], ['include-files-in-html'])
+	gulp.watch([config.clientAngularAppFiles, config.webIndex], ['include-files-in-html'])
 });

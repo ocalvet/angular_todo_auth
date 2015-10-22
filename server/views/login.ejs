@@ -1,0 +1,20 @@
+<% layout('layout') -%>
+<form name="loginForm" data-ng-controller="LoginCtrl as login">
+	<md-input-container>
+		<label>Email</label>
+		<input minlength="10" maxlength="100" ng-pattern="/^.+@.+\..+$/" type="email" required name="email" ng-model="login.data.email">
+		<div ng-messages="login.loginForm.email.$error">
+			<div ng-message-exp="['required', 'minlength', 'maxlength', 'pattern']">
+				Your email must be between 10 and 100 characters long and look like an e-mail address.
+			</div>
+		</div>
+	</md-input-container>
+	<md-input-container>
+		<label>Password</label>
+		<input required name="password" type="password" ng-model="login.data.password">
+		<div ng-messages="login.loginForm.password.$error">
+			<div ng-message="required">The password is required.</div>
+		</div>
+	</md-input-container>
+	<md-button clas="md-raised" data-ng-click="login.login(login.data)">Login</md-button>
+</form>

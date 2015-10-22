@@ -17,21 +17,9 @@
     </div>
   </md-toolbar>
   <md-content layout-padding flex>
-		<md-input-container flex>
-			<label>Todo Item</label>
-			<input ng-model="todoAppCtrl.todo">
-		</md-input-container>
-		<md-button class="md-raised md-primary" data-ng-click="todoAppCtrl.addTodo(todoAppCtrl.todo)">Add</md-button>	
-		<md-list>
-			<md-list-item class="md-2-line" ng-repeat="todo in todoAppCtrl.data.todos">
-				<div class="md-list-item-text" layout="column">
-					<h3>{{ todo.title }}</h3>
-					<p>{{ todo.date | date: 'short'  }}</p>
-				</div>
-				<md-checkbox class="md-secondary" ng-model="todo.completed"></md-checkbox>
-			</md-list-item>
-		</md-list>
+		<%- body %>
 	</md-content>
+	
 	<!-- inject:js -->
 	<script src="/libs/angular.js"></script>
 	<script src="/libs/angular-animate.js"></script>
