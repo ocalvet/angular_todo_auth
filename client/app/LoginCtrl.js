@@ -2,12 +2,24 @@
 	
 	'use strict';
 	
-	module.controller('LoginCtrl', [function() {
-		var login = this;
-		login.data = {};
-		login.login = function(credentials) {
-			console.log('credentials', credentials);
-		};
+	module.controller('LoginCtrl', ['authService', '$window', '$mdToast', 'localStorageService', 'LS_KEY', 
+		function(authService, $window, $mdToast, localStorageService, LS_KEY) {
+			var login = this;
+			login.data = {};
+			login.login = function(credentials) {
+				authService.login(credentials)
+					.then(function(response) {
+						localStorageService.set(LS_KEY, 'some value');
+						$window.location.href = '/';
+					}, function() {
+						$mdToast.show(
+							$mdToast.simple()
+								.content('There was an error login in')
+								.position('right bottom')
+								.hideDelay(3000)
+						);
+					});
+			};
 	}]);
 	
 })(angular.module('todoApp'));

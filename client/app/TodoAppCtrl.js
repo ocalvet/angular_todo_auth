@@ -2,8 +2,10 @@
 	
 	'use strict';
 	
-	module.controller('TodoAppCtrl', [function() {
+	module.controller('TodoAppCtrl', ['authService', 'localStorageService', 'LS_KEY', function(authService, localStorageService, LS_KEY) {
 		var todoAppCtrl 	= this;
+		console.log(localStorageService.get(LS_KEY));
+		
 		todoAppCtrl.data = {
 			title: 'Todo Angular Application',
 			todos:  [
