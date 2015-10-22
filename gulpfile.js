@@ -31,7 +31,7 @@ gulp.task('move-libraries', function() {
 });
 
 gulp.task('move-styles', function() {
-	return gulp.src(config.clientStylesFiles)
+	return gulp.src(['./node_modules/angular-material/angular-material.css', config.clientStylesFiles])
 		.pipe(gulp.dest(config.serverPublicFolder + '/styles'));
 });
 

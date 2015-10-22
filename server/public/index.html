@@ -4,19 +4,41 @@
 	<meta charset="UTF-8">
 	<title>Angular Todo</title>
 	<!-- inject:css -->
+	<link rel="stylesheet" href="/styles/angular-material.css">
 	<link rel="stylesheet" href="/styles/app.css">
 	<!-- endinject -->
 </head>
 <body data-ng-app="todoApp" data-ng-controller="TodoAppCtrl as todoAppCtrl" data-ng-cloak="">
-	<h1 class="title">{{ todoAppCtrl.data.title }}</h1>
-
+	<md-toolbar md-scroll-shrink ng-if="true">
+    <div class="md-toolbar-tools">
+      <h3>
+        <span>{{ todoAppCtrl.data.title }}</span>
+      </h3>
+    </div>
+  </md-toolbar>
+  <md-content layout-padding flex>
+		<md-input-container flex>
+			<label>Todo Item</label>
+			<input ng-model="todoAppCtrl.todo">
+		</md-input-container>
+		<md-button class="md-raised md-primary" data-ng-click="todoAppCtrl.addTodo(todoAppCtrl.todo)">Add</md-button>	
+		<md-list>
+			<md-list-item class="md-2-line" ng-repeat="todo in todoAppCtrl.data.todos">
+				<div class="md-list-item-text" layout="column">
+					<h3>{{ todo.title }}</h3>
+					<p>{{ todo.date | date: 'short'  }}</p>
+				</div>
+				<md-checkbox class="md-secondary" ng-model="todo.completed"></md-checkbox>
+			</md-list-item>
+		</md-list>
+	</md-content>
 	<!-- inject:js -->
 	<script src="/libs/angular.js"></script>
 	<script src="/libs/angular-animate.js"></script>
 	<script src="/libs/angular-aria.js"></script>
 	<script src="/libs/angular-material.js"></script>
 	<!-- endinject -->
-	
+
 	<!-- application:js -->
 	<script src="/todo.js"></script>
 	<!-- endinject -->
