@@ -10,6 +10,7 @@
 				authService.login(credentials)
 					.then(function(response) {
 						localStorageService.set(LS_KEY, response.data.access_token);
+						console.log('user response', response);
 						$window.location.href = '/dashboard';
 					}, function() {
 						$mdToast.show(

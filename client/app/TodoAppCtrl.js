@@ -23,6 +23,7 @@
 				.then(function(response) {
 					console.log('todos ', response.data);
 					todoAppCtrl.data.todos = response.data;
+					console.log('todos', response);
 				}, function(res) {
 					console.log('Error getting todos', res);
 				});
@@ -31,7 +32,7 @@
 				todoService.addTodo({ title: title })
 					.then(function(response) {
 						todoAppCtrl.data.todos.push(response.data.todo);
-						console.log('Todo added');
+						console.log('Todo added', response);
 					}, function(response) {
 						console.log('There was an error adding the todo');
 					});
