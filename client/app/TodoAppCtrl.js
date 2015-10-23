@@ -9,10 +9,10 @@
 			var token = localStorageService.get(LS_KEY);
 			
 			console.log('token - ', token);
-			todoAppCtrl.isAuthenticated = token;
+			todoAppCtrl.isAuthenticated = token && token.length > 0;
 			
 			console.log($window.location);
-			todoAppCtrl.showRegistration = $window.location.pathname !== '/';
+			todoAppCtrl.showRegistration = $window.location.pathname === '/';
 			
 			todoAppCtrl.data = {
 				title: 'Todo Angular Application',

@@ -16,7 +16,7 @@
       </h3>
 			<md-button ng-show="todoAppCtrl.isAuthenticated" data-ng-click="todoAppCtrl.logout()">Logout</md-button>
 			<md-button ng-hide="todoAppCtrl.isAuthenticated || todoAppCtrl.showRegistration" data-ng-click="todoAppCtrl.register()">Register</md-button>
-			<md-button ng-show="todoAppCtrl.showRegistration" data-ng-click="todoAppCtrl.signin()">Sign In</md-button>
+			<md-button ng-show="!todoAppCtrl.isAuthenticated && todoAppCtrl.showRegistration" data-ng-click="todoAppCtrl.signin()">Sign In</md-button>
     </div>
   </md-toolbar>
   <md-content layout-padding flex>
