@@ -7,7 +7,7 @@
 		registration.data = {};
 		registration.completeRegistration = function(user) {
 			console.log('user register', user);
-			$window.location.href = "/todo";
+			$window.location.href = "/dashboard";
 		};
 	}]);
 	

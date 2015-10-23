@@ -10,7 +10,7 @@
 				authService.login(credentials)
 					.then(function(response) {
 						localStorageService.set(LS_KEY, 'some value');
-						$window.location.href = '/todo';
+						$window.location.href = '/dashboard';
 					}, function() {
 						$mdToast.show(
 							$mdToast.simple()
