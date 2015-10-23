@@ -11,9 +11,12 @@
 <body data-ng-app="todoApp" data-ng-controller="TodoAppCtrl as todoAppCtrl" data-ng-cloak="">
 	<md-toolbar md-scroll-shrink ng-if="true">
     <div class="md-toolbar-tools">
-      <h3>
+      <h3 flex>
         <span>{{ todoAppCtrl.data.title }}</span>
       </h3>
+			<md-button ng-show="todoAppCtrl.isAuthenticated" data-ng-click="todoAppCtrl.logout()">Logout</md-button>
+			<md-button ng-hide="todoAppCtrl.isAuthenticated || todoAppCtrl.showRegistration" data-ng-click="todoAppCtrl.register()">Register</md-button>
+			<md-button ng-show="todoAppCtrl.showRegistration" data-ng-click="todoAppCtrl.signin()">Sign In</md-button>
     </div>
   </md-toolbar>
   <md-content layout-padding flex>
