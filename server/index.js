@@ -41,7 +41,7 @@ app.post('/todo', function(req, res) {
 	var todo = req.body;
 	
 	var newTodo = {
-		title: todo.name,
+		title: todo.title,
 		date: new Date(),
 		completed: false
 	};

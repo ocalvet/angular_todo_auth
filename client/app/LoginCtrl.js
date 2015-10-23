@@ -9,7 +9,7 @@
 			login.login = function(credentials) {
 				authService.login(credentials)
 					.then(function(response) {
-						localStorageService.set(LS_KEY, 'some value');
+						localStorageService.set(LS_KEY, response.data.access_token);
 						$window.location.href = '/dashboard';
 					}, function() {
 						$mdToast.show(
