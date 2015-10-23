@@ -51,8 +51,23 @@ app.post('/todo', function(req, res) {
 			res.status(404).json({ message: 'There was a problem inserting todo'});
 		} else {
 			res.json({
-				todo: todo,
-				access_token: "sdadjkasjdksadsa.djasldkladj;alsfkal;dklsdafklasfk"
+				todo: todo
+			});
+		}
+	});
+});
+
+// update a todo
+app.put('/todo/:todoId', function(req, res) {
+	var updatedTodo = req.body;
+	var todoId = req.params.todoId
+	
+	todos.update({ _id: todoId }, { $set: { completed: updatedTodo.completed } }, {}, function(err, todo) {
+		if(err || !todo) {
+			res.status(400).json({ message: "Todo was not updated" });
+		} else {
+			res.json({
+				todo: todo
 			});
 		}
 	});
@@ -71,10 +86,22 @@ app.get('/user', function(req, res) {
 
 // Login user
 app.post('/login', function(req, res) {
-	res.json({
-		user: req.body,
-		access_token: 'adskasdjalksdme.mdemelekmekljfoaiejpdk[aepedlapedealp'
-	})
+	var userCredentials = req.body;
+	
+	if (!userCredentials.email) {
+		res.status(422).json("Error sigin in");
+	} else {
+		users.findOne({ email: userCredentials.email, password: userCredentials.password }, function (err, user) {
+			if (err || !user) {
+				res.status(422).json("Error sigin in");
+			} else {
+				res.json({
+					user: user,
+					access_token: 'adskasdjalksdme.mdemelekmekljfoaiejpdk[aepedlapedealp'
+				});
+			}
+		});
+	}
 });
 
 // Register a user

@@ -10,6 +10,6 @@
 			<h3>{{ todo.title }}</h3>
 			<p>{{ todo.date | date: 'short'  }}</p>
 		</div>
-		<md-checkbox class="md-secondary" ng-model="todo.completed"></md-checkbox>
+		<md-checkbox class="md-secondary" ng-model="todo.completed" ng-change="todoAppCtrl.updateCompletedFlag(todo)"></md-checkbox>
 	</md-list-item>
 </md-list>

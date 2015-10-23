@@ -2,8 +2,8 @@
 	
 	'use strict';
 	
-	module.controller('TodoAppCtrl', ['authService', 'localStorageService', 'LS_KEY', '$window', 'todoService', 
-		function(authService, localStorageService, LS_KEY, $window, todoService) {
+	module.controller('TodoAppCtrl', ['authService', 'localStorageService', 'LS_KEY', '$window', 'todoService', '$mdToast', 
+		function(authService, localStorageService, LS_KEY, $window, todoService, $mdToast) {
 			var todoAppCtrl 	= this;
 			var nextId = 4;
 			var token = localStorageService.get(LS_KEY);
@@ -25,7 +25,12 @@
 					todoAppCtrl.data.todos = response.data;
 					console.log('todos', response);
 				}, function(res) {
-					console.log('Error getting todos', res);
+						$mdToast.show(
+							$mdToast.simple()
+								.content('Error getting todos')
+								.position('right bottom')
+								.hideDelay(5000)
+						);
 				});
 			
 			todoAppCtrl.addTodo = function (title) {
@@ -34,13 +39,27 @@
 						todoAppCtrl.data.todos.push(response.data.todo);
 						console.log('Todo added', response);
 					}, function(response) {
-						console.log('There was an error adding the todo');
+						$mdToast.show(
+							$mdToast.simple()
+								.content('There was an error adding the todo')
+								.position('right bottom')
+								.hideDelay(5000)
+						);
 					});
 			};
 			
-			todoAppCtrl.toggleCompletedFlag = function (todoItem) {
-				console.log('marking complete', todoItem);
-				todoItem.completed = !todoItem.completed;
+			todoAppCtrl.updateCompletedFlag = function (todoItem) {
+				todoService.updateTodo(todoItem)
+					.then(function(todo) {
+						$mdToast.show(
+							$mdToast.simple()
+								.content('Todo updated')
+								.position('right bottom')
+								.hideDelay(5000)
+						);
+					}, function() {
+						todoItem.completed = !todoItem.completed;
+					});
 			};
 			
 			todoAppCtrl.logout = function() {

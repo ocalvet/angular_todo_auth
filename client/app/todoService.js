@@ -9,11 +9,15 @@
 		}, 
 		addTodo = function(todo) {
 			return $http.post('/todo', todo);
+		},
+		updateTodo = function(todo) {
+			return $http.put('/todo/' + todo._id, todo);
 		};
 		
 		return {
 			getTodos: getTodos,
-			addTodo: addTodo
+			addTodo: addTodo,
+			updateTodo: updateTodo
 		}
 	}]);
 	
