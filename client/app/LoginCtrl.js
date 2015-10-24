@@ -2,14 +2,14 @@
 	
 	'use strict';
 	
-	module.controller('LoginCtrl', ['authService', '$window', '$mdToast', 'localStorageService', 'LS_KEY', 
-		function(authService, $window, $mdToast, localStorageService, LS_KEY) {
+	module.controller('LoginCtrl', ['authService', '$window', '$mdToast', 'tokenService', 
+		function(authService, $window, $mdToast, tokenService) {
 			var login = this;
 			login.data = {};
 			login.login = function(credentials) {
 				authService.login(credentials)
 					.then(function(response) {
-						localStorageService.set(LS_KEY, response.data.access_token);
+						tokenService.setToken(response.data.access_token);
 						console.log('user response', response);
 						$window.location.href = '/dashboard';
 					}, function() {

@@ -4,11 +4,16 @@ var path = require('path');
 var engine = require('ejs-mate');
 var bodyParser = require('body-parser');
 var Datastore = require('nedb');
+var jwt = require('jsonwebtoken');
 var users = new Datastore({ filename: 'db/users.db', autoload: true });
 var todos = new Datastore({ filename: 'db/todos.db', autoload: true });
+var secret = "sjakjaskfjaksljk";
+
+var morgan      = require('morgan');
 
 // Set body parser to parse application/json body
 app.use(bodyParser.json());
+app.use(morgan('dev'));
 
 // Set ejs as the view engine
 app.engine('ejs', engine);
@@ -25,33 +30,63 @@ app.get('/dashboard', function(req, res) {
 	res.render('index');
 });
 
-// Get a list of todos
-app.get('/todo', function(req, res) {
-	todos.find({}, function(err, todos) {
-		if (err) {
-			res.status(404).json({ message: 'There was a problem loading todos'});
+function checkToken(token, callback) {
+	jwt.verify(token, secret, function(err, decoded) {
+		if(err) {
+			callback("Token could not be verified");
 		} else {
-			res.json(todos);
+			callback(null, decoded);
 		}
 	});
+};
+
+// Get a list of todos
+app.get('/todo', function(req, res) {
+	var token = req.get('Authorization').split(" ")[1];
+	checkToken(token, function(err, decoded) {
+		if (err) {
+			res.status(403).send({ 
+        success: false, 
+        message: 'No token provided.' 
+    	});
+		} else {
+			todos.find({}, function(err, todos) {
+				if (err) {
+					res.status(404).json({ message: 'There was a problem loading todos'});
+				} else {
+					res.json(todos);
+				}
+			});
+		}
+	});
+	
 });
 
 // Create a todo
 app.post('/todo', function(req, res) {
 	var todo = req.body;
-	
-	var newTodo = {
-		title: todo.title,
-		date: new Date(),
-		completed: false
-	};
-	
-	todos.insert(newTodo, function(err, todo) {
+	var token = req.get('Authorization').split(" ")[1];
+	checkToken(token, function(err, decoded) {
 		if (err) {
-			res.status(404).json({ message: 'There was a problem inserting todo'});
+			res.status(403).send({ 
+        success: false, 
+        message: 'No token provided.' 
+    	});
 		} else {
-			res.json({
-				todo: todo
+			var newTodo = {
+				title: todo.title,
+				date: new Date(),
+				completed: false
+			};
+			
+			todos.insert(newTodo, function(err, todo) {
+				if (err) {
+					res.status(404).json({ message: 'There was a problem inserting todo'});
+				} else {
+					res.json({
+						todo: todo
+					});
+				}
 			});
 		}
 	});
@@ -62,12 +97,22 @@ app.put('/todo/:todoId', function(req, res) {
 	var updatedTodo = req.body;
 	var todoId = req.params.todoId
 	
-	todos.update({ _id: todoId }, { $set: { completed: updatedTodo.completed } }, {}, function(err, todo) {
-		if(err || !todo) {
-			res.status(400).json({ message: "Todo was not updated" });
+	var token = req.get('Authorization').split(" ")[1];
+	checkToken(token, function(err, decoded) {
+		if (err) {
+			res.status(403).send({ 
+        success: false, 
+        message: 'No token provided.' 
+    	});
 		} else {
-			res.json({
-				todo: todo
+			todos.update({ _id: todoId }, { $set: { completed: updatedTodo.completed } }, {}, function(err, todo) {
+				if(err || !todo) {
+					res.status(400).json({ message: "Todo was not updated" });
+				} else {
+					res.json({
+						todo: todo
+					});
+				}
 			});
 		}
 	});
@@ -97,7 +142,9 @@ app.post('/login', function(req, res) {
 			} else {
 				res.json({
 					user: user,
-					access_token: 'adskasdjalksdme.mdemelekmekljfoaiejpdk[aepedlapedealp'
+					access_token: jwt.sign(user, secret, {
+						expiresInMinutes: 1440 // expires in 24 hours
+					})
 				});
 			}
 		});

@@ -2,42 +2,40 @@
 	
 	'use strict';
 	
-	module.controller('TodoAppCtrl', ['authService', 'localStorageService', 'LS_KEY', '$window', 'todoService', '$mdToast', 
-		function(authService, localStorageService, LS_KEY, $window, todoService, $mdToast) {
+	module.controller('TodoAppCtrl', ['authService', 'tokenService', '$window', 'todoService', '$mdToast', 
+		function(authService, tokenService, $window, todoService, $mdToast) {
 			var todoAppCtrl 	= this;
-			var nextId = 4;
-			var token = localStorageService.get(LS_KEY);
+			var token;
 			
-			console.log('token - ', token);
-			todoAppCtrl.isAuthenticated = token && token.length > 0;
-			
-			console.log($window.location);
 			todoAppCtrl.showRegistration = $window.location.pathname === '/';
+			
+			if (!todoAppCtrl.showRegistration) {
+				token = tokenService.getToken();
+				console.log('token <--> ' + token);
+				todoAppCtrl.isAuthenticated = token && token.length > 0;
+				
+				todoService.getTodos()
+					.then(function(response) {
+						todoAppCtrl.data.todos = response.data;
+					}, function(res) {
+							$mdToast.show(
+								$mdToast.simple()
+									.content('Error getting todos')
+									.position('right bottom')
+									.hideDelay(5000)
+							);
+					});
+			}
 			
 			todoAppCtrl.data = {
 				title: 'Todo Angular Application',
 				todos:  []
 			};
 			
-			todoService.getTodos()
-				.then(function(response) {
-					console.log('todos ', response.data);
-					todoAppCtrl.data.todos = response.data;
-					console.log('todos', response);
-				}, function(res) {
-						$mdToast.show(
-							$mdToast.simple()
-								.content('Error getting todos')
-								.position('right bottom')
-								.hideDelay(5000)
-						);
-				});
-			
 			todoAppCtrl.addTodo = function (title) {
 				todoService.addTodo({ title: title })
 					.then(function(response) {
 						todoAppCtrl.data.todos.push(response.data.todo);
-						console.log('Todo added', response);
 					}, function(response) {
 						$mdToast.show(
 							$mdToast.simple()
@@ -63,7 +61,7 @@
 			};
 			
 			todoAppCtrl.logout = function() {
-				localStorageService.remove(LS_KEY);
+				tokenService.remove();
 				$window.location.href = '/';
 			};
 			
